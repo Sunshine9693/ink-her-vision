@@ -94,7 +94,7 @@ const HostelsPage = () => (
                     <div key={floor} className="text-center p-2 rounded-lg bg-secondary">
                       <Layers className="w-4 h-4 mx-auto text-primary mb-1" />
                       <div className="text-xs text-muted-foreground capitalize">{floor} Floor</div>
-                      <div className="text-sm font-semibold text-card-foreground">{count} rooms</div>
+                      <div className="text-sm font-semibold text-card-foreground">{count} {h.isDormitory ? "dormitory" : "rooms"}</div>
                     </div>
                   ))}
                 </div>
