@@ -20,6 +20,7 @@ const ApplyPage = () => {
     hostelPreference: "",
     roomType: "",
     address: "",
+    distance: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,7 +28,7 @@ const ApplyPage = () => {
     toast.success("Application submitted successfully! Check your status using your enrollment number.");
     setFormData({
       fullName: "", enrollmentNo: "", email: "", phone: "",
-      department: "", year: "", hostelPreference: "", roomType: "", address: "",
+      department: "", year: "", hostelPreference: "", roomType: "", address: "", distance: "",
     });
   };
 
@@ -56,7 +57,7 @@ const ApplyPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="enrollmentNo">Enrollment Number</Label>
-                  <Input id="enrollmentNo" value={formData.enrollmentNo} onChange={(e) => handleChange("enrollmentNo", e.target.value)} required placeholder="e.g. 23BTCS012HY" />
+                  <Input id="enrollmentNo" value={formData.enrollmentNo} onChange={(e) => handleChange("enrollmentNo", e.target.value)} required placeholder="e.g. A230012" />
                 </div>
               </div>
 
@@ -77,11 +78,11 @@ const ApplyPage = () => {
                   <Select value={formData.department} onValueChange={(v) => handleChange("department", v)}>
                     <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="csit">CS & IT</SelectItem>
-                      <SelectItem value="ece">ECE</SelectItem>
-                      <SelectItem value="mech">Mechanical</SelectItem>
-                      <SelectItem value="civil">Civil</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="language">Language Department</SelectItem>
+                      <SelectItem value="science">School of Science</SelectItem>
+                      <SelectItem value="science-tech">School of Science and Technology</SelectItem>
+                      <SelectItem value="education">Education</SelectItem>
+                      <SelectItem value="law">Law</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -105,29 +106,34 @@ const ApplyPage = () => {
                   <Select value={formData.hostelPreference} onValueChange={(v) => handleChange("hostelPreference", v)}>
                     <SelectTrigger><SelectValue placeholder="Select hostel" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="hostel-a">Hostel A - Girls</SelectItem>
-                      <SelectItem value="hostel-b">Hostel B - Girls</SelectItem>
-                      <SelectItem value="hostel-c">Hostel C - Boys</SelectItem>
-                      <SelectItem value="hostel-d">Hostel D - Boys</SelectItem>
+                      <SelectItem value="gulzar">Gulzar Girls Hostel</SelectItem>
+                      <SelectItem value="ismat">Ismat Girls Hostel</SelectItem>
+                      <SelectItem value="quratulain">Quratulain Girls Hostel</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Room Type</Label>
+                  <Label>Floor Preference</Label>
                   <Select value={formData.roomType} onValueChange={(v) => handleChange("roomType", v)}>
-                    <SelectTrigger><SelectValue placeholder="Select room type" /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Select floor" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="single">Single Occupancy</SelectItem>
-                      <SelectItem value="double">Double Sharing</SelectItem>
-                      <SelectItem value="triple">Triple Sharing</SelectItem>
+                      <SelectItem value="ground">Ground Floor</SelectItem>
+                      <SelectItem value="first">First Floor</SelectItem>
+                      <SelectItem value="second">Second Floor</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="address">Permanent Address</Label>
-                <Textarea id="address" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} placeholder="Enter your permanent address" rows={3} />
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="address">Permanent Address</Label>
+                  <Textarea id="address" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} placeholder="Enter your permanent address" rows={3} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="distance">Distance from Hometown (in km)</Label>
+                  <Input id="distance" type="number" value={formData.distance} onChange={(e) => handleChange("distance", e.target.value)} placeholder="e.g. 250" />
+                </div>
               </div>
 
               <Button type="submit" size="lg" className="w-full gradient-hero text-primary-foreground rounded-full text-base font-semibold hover:scale-[1.02] transition-transform">

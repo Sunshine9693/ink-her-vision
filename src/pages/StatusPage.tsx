@@ -10,9 +10,9 @@ import Footer from "@/components/Footer";
 type StatusType = "approved" | "pending" | "rejected" | null;
 
 const mockStatuses: Record<string, { status: StatusType; hostel: string; room: string; date: string }> = {
-  "23BTCS012HY": { status: "approved", hostel: "Hostel A - Girls", room: "A-204", date: "2025-07-15" },
-  "23BTCS047HY": { status: "pending", hostel: "Hostel B - Girls", room: "—", date: "2025-07-20" },
-  "24BLCS002HY": { status: "rejected", hostel: "—", room: "—", date: "2025-07-10" },
+  "A230012": { status: "approved", hostel: "Gulzar Girls Hostel", room: "G-204", date: "2025-07-15" },
+  "A230047": { status: "pending", hostel: "Ismat Girls Hostel", room: "—", date: "2025-07-20" },
+  "A230132": { status: "rejected", hostel: "—", room: "—", date: "2025-07-10" },
 };
 
 const statusConfig = {
@@ -52,7 +52,7 @@ const StatusPage = () => {
                   id="enrollment"
                   value={enrollment}
                   onChange={(e) => setEnrollment(e.target.value)}
-                  placeholder="Enter enrollment number (e.g. 23BTCS012HY)"
+                  placeholder="Enter enrollment number (e.g. A230132)"
                   className="h-12"
                 />
               </div>
@@ -105,7 +105,7 @@ const StatusPage = () => {
             )}
 
             <div className="mt-8 p-4 rounded-xl bg-secondary text-sm text-muted-foreground">
-              <strong className="text-secondary-foreground">Demo enrollments:</strong> 23BTCS012HY (Approved), 23BTCS047HY (Pending), 24BLCS002HY (Rejected)
+              <strong className="text-secondary-foreground">Demo enrollments:</strong> A230012 (Approved), A230047 (Pending), A230132 (Rejected)
             </div>
           </motion.div>
         </div>
