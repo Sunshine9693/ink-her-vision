@@ -10,9 +10,9 @@ import Footer from "@/components/Footer";
 type StatusType = "approved" | "pending" | "rejected" | null;
 
 const mockStatuses: Record<string, { status: StatusType; hostel: string; room: string; date: string }> = {
-  "23BTCS012HY": { status: "approved", hostel: "Hostel A - Girls", room: "A-204", date: "2025-07-15" },
-  "23BTCS047HY": { status: "pending", hostel: "Hostel B - Girls", room: "—", date: "2025-07-20" },
-  "24BLCS002HY": { status: "rejected", hostel: "—", room: "—", date: "2025-07-10" },
+  "A230012": { status: "approved", hostel: "Gulzar Girls Hostel", room: "G-204", date: "2025-07-15" },
+  "A230047": { status: "pending", hostel: "Ismat Girls Hostel", room: "—", date: "2025-07-20" },
+  "A230132": { status: "rejected", hostel: "—", room: "—", date: "2025-07-10" },
 };
 
 const statusConfig = {
