@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const ApplyPage = () => {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     enrollmentNo: "",
@@ -18,18 +20,38 @@ const ApplyPage = () => {
     department: "",
     year: "",
     hostelPreference: "",
-    roomType: "",
+    floorPreference: "",
     address: "",
     distance: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Application submitted successfully! Check your status using your enrollment number.");
-    setFormData({
-      fullName: "", enrollmentNo: "", email: "", phone: "",
-      department: "", year: "", hostelPreference: "", roomType: "", address: "", distance: "",
-    });
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("hostel_applications").insert({
+        full_name: formData.fullName,
+        enrollment_no: formData.enrollmentNo.toUpperCase(),
+        email: formData.email,
+        phone: formData.phone,
+        department: formData.department,
+        year: formData.year,
+        hostel_preference: formData.hostelPreference,
+        floor_preference: formData.floorPreference,
+        address: formData.address,
+        distance: formData.distance,
+      } as any);
+      if (error) throw error;
+      toast.success("Application submitted successfully! Check your status using your enrollment number.");
+      setFormData({
+        fullName: "", enrollmentNo: "", email: "", phone: "",
+        department: "", year: "", hostelPreference: "", floorPreference: "", address: "", distance: "",
+      });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to submit application");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -114,7 +136,7 @@ const ApplyPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Floor Preference</Label>
-                  <Select value={formData.roomType} onValueChange={(v) => handleChange("roomType", v)}>
+                  <Select value={formData.floorPreference} onValueChange={(v) => handleChange("floorPreference", v)}>
                     <SelectTrigger><SelectValue placeholder="Select floor" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="ground">Ground Floor</SelectItem>
@@ -136,8 +158,8 @@ const ApplyPage = () => {
                 </div>
               </div>
 
-              <Button type="submit" size="lg" className="w-full gradient-hero text-primary-foreground rounded-full text-base font-semibold hover:scale-[1.02] transition-transform">
-                Submit Application
+              <Button type="submit" size="lg" disabled={loading} className="w-full gradient-hero text-primary-foreground rounded-full text-base font-semibold hover:scale-[1.02] transition-transform">
+                {loading ? "Submitting..." : "Submit Application"}
               </Button>
             </form>
           </motion.div>

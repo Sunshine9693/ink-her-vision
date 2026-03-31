@@ -4,16 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Search, CheckCircle, Clock, XCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-type StatusType = "approved" | "pending" | "rejected" | null;
-
-const mockStatuses: Record<string, { status: StatusType; hostel: string; room: string; date: string }> = {
-  "A230012": { status: "approved", hostel: "Gulzar Girls Hostel", room: "G-204", date: "2025-07-15" },
-  "A230047": { status: "pending", hostel: "Ismat Girls Hostel", room: "—", date: "2025-07-20" },
-  "A230132": { status: "rejected", hostel: "—", room: "—", date: "2025-07-10" },
-};
+type StatusType = "approved" | "pending" | "rejected";
 
 const statusConfig = {
   approved: { icon: CheckCircle, label: "Approved", color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
@@ -21,15 +16,36 @@ const statusConfig = {
   rejected: { icon: XCircle, label: "Rejected", color: "text-destructive bg-destructive/10 border-destructive/30" },
 };
 
+const hostelNames: Record<string, string> = {
+  gulzar: "Gulzar Girls Hostel",
+  ismat: "Ismat Girls Hostel",
+  quratulain: "Quratulain Girls Hostel",
+};
+
 const StatusPage = () => {
   const [enrollment, setEnrollment] = useState("");
-  const [result, setResult] = useState<typeof mockStatuses[string] | null>(null);
+  const [result, setResult] = useState<any>(null);
   const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setSearched(true);
-    setResult(mockStatuses[enrollment.toUpperCase()] || null);
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("hostel_applications")
+        .select("*")
+        .eq("enrollment_no", enrollment.toUpperCase())
+        .order("created_at", { ascending: false })
+        .limit(1);
+      if (error) throw error;
+      setResult(data && data.length > 0 ? data[0] : null);
+    } catch {
+      setResult(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -56,18 +72,19 @@ const StatusPage = () => {
                   className="h-12"
                 />
               </div>
-              <Button type="submit" size="lg" className="gradient-hero text-primary-foreground rounded-lg px-6">
+              <Button type="submit" size="lg" disabled={loading} className="gradient-hero text-primary-foreground rounded-lg px-6">
                 <Search className="w-4 h-4" />
               </Button>
             </form>
 
-            {searched && (
+            {searched && !loading && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                {result && result.status ? (
+                {result ? (
                   <div className="p-6 rounded-2xl border border-border bg-card shadow-soft">
                     <div className="flex items-center gap-3 mb-6">
                       {(() => {
-                        const cfg = statusConfig[result.status];
+                        const status = result.status as StatusType;
+                        const cfg = statusConfig[status] || statusConfig.pending;
                         const Icon = cfg.icon;
                         return (
                           <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold ${cfg.color}`}>
@@ -78,20 +95,28 @@ const StatusPage = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
+                        <span className="text-muted-foreground">Name</span>
+                        <p className="font-semibold text-foreground">{result.full_name}</p>
+                      </div>
+                      <div>
                         <span className="text-muted-foreground">Enrollment</span>
-                        <p className="font-semibold text-foreground">{enrollment.toUpperCase()}</p>
+                        <p className="font-semibold text-foreground">{result.enrollment_no}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Hostel</span>
-                        <p className="font-semibold text-foreground">{result.hostel}</p>
+                        <p className="font-semibold text-foreground">{hostelNames[result.hostel_preference] || result.hostel_preference}</p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Room</span>
-                        <p className="font-semibold text-foreground">{result.room}</p>
+                        <span className="text-muted-foreground">Floor</span>
+                        <p className="font-semibold text-foreground capitalize">{result.floor_preference}</p>
                       </div>
                       <div>
-                        <span className="text-muted-foreground">Date</span>
-                        <p className="font-semibold text-foreground">{result.date}</p>
+                        <span className="text-muted-foreground">Department</span>
+                        <p className="font-semibold text-foreground capitalize">{result.department}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Applied On</span>
+                        <p className="font-semibold text-foreground">{new Date(result.created_at).toLocaleDateString()}</p>
                       </div>
                     </div>
                   </div>
@@ -104,9 +129,11 @@ const StatusPage = () => {
               </motion.div>
             )}
 
-            <div className="mt-8 p-4 rounded-xl bg-secondary text-sm text-muted-foreground">
-              <strong className="text-secondary-foreground">Demo enrollments:</strong> A230012 (Approved), A230047 (Pending), A230132 (Rejected)
-            </div>
+            {loading && (
+              <div className="text-center p-8">
+                <p className="text-muted-foreground">Searching...</p>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>

@@ -1,18 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { BarChart3, Users, Building2, CheckCircle, Clock, XCircle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-const mockApplications = [
-  { id: 1, name: "Afreen Alim", enrollment: "23BTCS012HY", dept: "CS & IT", hostel: "Hostel A", status: "approved" as const },
-  { id: 2, name: "Sana Fatma", enrollment: "23BTCS047HY", dept: "CS & IT", hostel: "Hostel B", status: "pending" as const },
-  { id: 3, name: "Nusrat Fatma", enrollment: "24BLCS002HY", dept: "CS & IT", hostel: "Hostel A", status: "rejected" as const },
-  { id: 4, name: "Fatima Khan", enrollment: "23BTECE015HY", dept: "ECE", hostel: "Hostel B", status: "approved" as const },
-  { id: 5, name: "Aisha Begum", enrollment: "23BTCS030HY", dept: "CS & IT", hostel: "Hostel A", status: "pending" as const },
-];
 
 const statusStyles = {
   approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -22,23 +16,54 @@ const statusStyles = {
 
 const statusIcons = { approved: CheckCircle, pending: Clock, rejected: XCircle };
 
+const hostelNames: Record<string, string> = {
+  gulzar: "Gulzar Girls Hostel",
+  ismat: "Ismat Girls Hostel",
+  quratulain: "Quratulain Girls Hostel",
+};
+
 const AdminPage = () => {
   const [search, setSearch] = useState("");
-  const [applications, setApplications] = useState(mockApplications);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchApplications = async () => {
+    const { data, error } = await supabase
+      .from("hostel_applications")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (!error && data) setApplications(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
 
   const filtered = applications.filter(
-    (a) => a.name.toLowerCase().includes(search.toLowerCase()) || a.enrollment.toLowerCase().includes(search.toLowerCase())
+    (a) =>
+      a.full_name.toLowerCase().includes(search.toLowerCase()) ||
+      a.enrollment_no.toLowerCase().includes(search.toLowerCase())
   );
 
-  const updateStatus = (id: number, status: "approved" | "pending" | "rejected") => {
+  const updateStatus = async (id: string, status: string) => {
+    const { error } = await supabase
+      .from("hostel_applications")
+      .update({ status } as any)
+      .eq("id", id);
+    if (error) {
+      toast.error("Failed to update status");
+      return;
+    }
     setApplications((prev) => prev.map((a) => (a.id === id ? { ...a, status } : a)));
+    toast.success(`Application ${status}`);
   };
 
   const stats = [
     { icon: Users, label: "Total Applications", value: applications.length, color: "gradient-hero" },
     { icon: CheckCircle, label: "Approved", value: applications.filter((a) => a.status === "approved").length, color: "bg-emerald-500" },
     { icon: Clock, label: "Pending", value: applications.filter((a) => a.status === "pending").length, color: "bg-gold" },
-    { icon: Building2, label: "Hostels", value: 4, color: "bg-accent" },
+    { icon: Building2, label: "Hostels", value: 3, color: "bg-accent" },
   ];
 
   return (
@@ -76,7 +101,7 @@ const AdminPage = () => {
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search by name or enrollment..."
+                  placeholder="Search by name or enrollment (e.g. A230132)..."
                   className="pl-10"
                 />
               </div>
@@ -101,32 +126,39 @@ const AdminPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filtered.map((app) => {
-                      const StatusIcon = statusIcons[app.status];
-                      return (
-                        <tr key={app.id} className="border-b border-border last:border-0 hover:bg-secondary/50 transition-colors">
-                          <td className="px-4 py-3 font-medium text-card-foreground">{app.name}</td>
-                          <td className="px-4 py-3 text-sm text-muted-foreground font-mono">{app.enrollment}</td>
-                          <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell">{app.dept}</td>
-                          <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell">{app.hostel}</td>
-                          <td className="px-4 py-3">
-                            <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border ${statusStyles[app.status]}`}>
-                              <StatusIcon className="w-3 h-3" /> {app.status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="flex gap-1">
-                              <Button size="sm" variant="ghost" className="h-7 text-xs text-emerald-600 hover:bg-emerald-50" onClick={() => updateStatus(app.id, "approved")}>
-                                Approve
-                              </Button>
-                              <Button size="sm" variant="ghost" className="h-7 text-xs text-destructive hover:bg-destructive/10" onClick={() => updateStatus(app.id, "rejected")}>
-                                Reject
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {loading ? (
+                      <tr><td colSpan={6} className="text-center py-8 text-muted-foreground">Loading...</td></tr>
+                    ) : filtered.length === 0 ? (
+                      <tr><td colSpan={6} className="text-center py-8 text-muted-foreground">No applications found</td></tr>
+                    ) : (
+                      filtered.map((app) => {
+                        const status = app.status as "approved" | "pending" | "rejected";
+                        const StatusIcon = statusIcons[status] || Clock;
+                        return (
+                          <tr key={app.id} className="border-b border-border last:border-0 hover:bg-secondary/50 transition-colors">
+                            <td className="px-4 py-3 font-medium text-card-foreground">{app.full_name}</td>
+                            <td className="px-4 py-3 text-sm text-muted-foreground font-mono">{app.enrollment_no}</td>
+                            <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell capitalize">{app.department}</td>
+                            <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell">{hostelNames[app.hostel_preference] || app.hostel_preference}</td>
+                            <td className="px-4 py-3">
+                              <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border ${statusStyles[status] || ""}`}>
+                                <StatusIcon className="w-3 h-3" /> {status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex gap-1">
+                                <Button size="sm" variant="ghost" className="h-7 text-xs text-emerald-600 hover:bg-emerald-50" onClick={() => updateStatus(app.id, "approved")}>
+                                  Approve
+                                </Button>
+                                <Button size="sm" variant="ghost" className="h-7 text-xs text-destructive hover:bg-destructive/10" onClick={() => updateStatus(app.id, "rejected")}>
+                                  Reject
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
