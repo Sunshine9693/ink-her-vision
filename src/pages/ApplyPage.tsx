@@ -124,9 +124,15 @@ const ApplyPage = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="address">Permanent Address</Label>
-                <Textarea id="address" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} placeholder="Enter your permanent address" rows={3} />
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="address">Permanent Address</Label>
+                  <Textarea id="address" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} placeholder="Enter your permanent address" rows={3} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="distance">Distance from Hometown (in km)</Label>
+                  <Input id="distance" type="number" value={formData.distance} onChange={(e) => handleChange("distance", e.target.value)} placeholder="e.g. 250" />
+                </div>
               </div>
 
               <Button type="submit" size="lg" className="w-full gradient-hero text-primary-foreground rounded-full text-base font-semibold hover:scale-[1.02] transition-transform">
