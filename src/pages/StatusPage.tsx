@@ -52,7 +52,7 @@ const StatusPage = () => {
                   id="enrollment"
                   value={enrollment}
                   onChange={(e) => setEnrollment(e.target.value)}
-                  placeholder="Enter enrollment number (e.g. 23BTCS012HY)"
+                  placeholder="Enter enrollment number (e.g. A230132)"
                   className="h-12"
                 />
               </div>
