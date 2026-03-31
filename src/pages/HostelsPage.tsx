@@ -5,36 +5,28 @@ import Footer from "@/components/Footer";
 
 const hostels = [
   {
-    name: "Hostel A",
+    name: "Gulzar Girls Hostel",
     type: "Girls",
     capacity: 120,
     occupied: 95,
     amenities: ["Wi-Fi", "Mess", "Security", "Laundry"],
-    rooms: { single: 20, double: 30, triple: 10 },
+    floors: { ground: 20, first: 30, second: 10 },
   },
   {
-    name: "Hostel B",
+    name: "Ismat Girls Hostel",
     type: "Girls",
     capacity: 100,
     occupied: 78,
     amenities: ["Wi-Fi", "Mess", "Security", "Common Room"],
-    rooms: { single: 15, double: 25, triple: 12 },
+    floors: { ground: 15, first: 25, second: 12 },
   },
   {
-    name: "Hostel C",
-    type: "Boys",
+    name: "Quratulain Girls Hostel",
+    type: "Girls",
     capacity: 150,
     occupied: 130,
-    amenities: ["Wi-Fi", "Mess", "Security", "Gym"],
-    rooms: { single: 30, double: 40, triple: 10 },
-  },
-  {
-    name: "Hostel D",
-    type: "Boys",
-    capacity: 130,
-    occupied: 110,
     amenities: ["Wi-Fi", "Mess", "Security", "Library"],
-    rooms: { single: 25, double: 35, triple: 8 },
+    floors: { ground: 30, first: 40, second: 10 },
   },
 ];
 
