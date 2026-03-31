@@ -150,7 +150,7 @@ const Index = () => {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
               <h2 className="font-display text-4xl font-bold text-foreground mb-6">About the Project</h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                The <strong className="text-foreground">Hostel Ease</strong> system is developed as part of the B.Tech program at
+                The <strong className="text-foreground">MANUU Automated Hostel Allocation System</strong> is developed as part of the B.Tech program at
                 Maulana Azad National Urdu University, Hyderabad. It automates the hostel allocation process, ensuring
                 transparency, accuracy, and efficiency in managing student accommodations.
               </p>
