@@ -14,7 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      hostel_applications: {
+        Row: {
+          address: string | null
+          created_at: string
+          department: string
+          distance: string | null
+          email: string
+          enrollment_no: string
+          floor_preference: string
+          full_name: string
+          hostel_preference: string
+          id: string
+          phone: string
+          status: string
+          year: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          department: string
+          distance?: string | null
+          email: string
+          enrollment_no: string
+          floor_preference: string
+          full_name: string
+          hostel_preference: string
+          id?: string
+          phone: string
+          status?: string
+          year: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          department?: string
+          distance?: string | null
+          email?: string
+          enrollment_no?: string
+          floor_preference?: string
+          full_name?: string
+          hostel_preference?: string
+          id?: string
+          phone?: string
+          status?: string
+          year?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
