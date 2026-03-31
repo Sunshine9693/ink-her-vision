@@ -112,13 +112,13 @@ const ApplyPage = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Room Type</Label>
+                  <Label>Floor Preference</Label>
                   <Select value={formData.roomType} onValueChange={(v) => handleChange("roomType", v)}>
-                    <SelectTrigger><SelectValue placeholder="Select room type" /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Select floor" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="single">Single Occupancy</SelectItem>
-                      <SelectItem value="double">Double Sharing</SelectItem>
-                      <SelectItem value="triple">Triple Sharing</SelectItem>
+                      <SelectItem value="ground">Ground Floor</SelectItem>
+                      <SelectItem value="first">First Floor</SelectItem>
+                      <SelectItem value="second">Second Floor</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
