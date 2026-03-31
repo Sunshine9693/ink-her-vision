@@ -115,7 +115,7 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="font-display text-4xl font-bold text-foreground mb-4">
-              Why <span className="text-gradient">HostelEase</span>?
+              Why <span className="text-gradient">MANUU AHAS</span>?
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               A modern solution to replace manual hostel allotment with digital efficiency
