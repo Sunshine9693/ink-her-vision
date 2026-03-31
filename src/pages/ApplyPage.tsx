@@ -105,10 +105,9 @@ const ApplyPage = () => {
                   <Select value={formData.hostelPreference} onValueChange={(v) => handleChange("hostelPreference", v)}>
                     <SelectTrigger><SelectValue placeholder="Select hostel" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="hostel-a">Hostel A - Girls</SelectItem>
-                      <SelectItem value="hostel-b">Hostel B - Girls</SelectItem>
-                      <SelectItem value="hostel-c">Hostel C - Boys</SelectItem>
-                      <SelectItem value="hostel-d">Hostel D - Boys</SelectItem>
+                      <SelectItem value="gulzar">Gulzar Girls Hostel</SelectItem>
+                      <SelectItem value="ismat">Ismat Girls Hostel</SelectItem>
+                      <SelectItem value="quratulain">Quratulain Girls Hostel</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
