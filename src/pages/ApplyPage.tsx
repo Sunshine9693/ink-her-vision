@@ -77,11 +77,11 @@ const ApplyPage = () => {
                   <Select value={formData.department} onValueChange={(v) => handleChange("department", v)}>
                     <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="csit">CS & IT</SelectItem>
-                      <SelectItem value="ece">ECE</SelectItem>
-                      <SelectItem value="mech">Mechanical</SelectItem>
-                      <SelectItem value="civil">Civil</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="language">Language Department</SelectItem>
+                      <SelectItem value="science">School of Science</SelectItem>
+                      <SelectItem value="science-tech">School of Science and Technology</SelectItem>
+                      <SelectItem value="education">Education</SelectItem>
+                      <SelectItem value="law">Law</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
