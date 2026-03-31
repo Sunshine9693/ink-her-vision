@@ -56,7 +56,7 @@ const ApplyPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="enrollmentNo">Enrollment Number</Label>
-                  <Input id="enrollmentNo" value={formData.enrollmentNo} onChange={(e) => handleChange("enrollmentNo", e.target.value)} required placeholder="e.g. 23BTCS012HY" />
+                  <Input id="enrollmentNo" value={formData.enrollmentNo} onChange={(e) => handleChange("enrollmentNo", e.target.value)} required placeholder="e.g. A230012" />
                 </div>
               </div>
 
