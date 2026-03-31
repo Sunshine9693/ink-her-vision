@@ -7,26 +7,27 @@ const hostels = [
   {
     name: "Gulzar Girls Hostel",
     type: "Girls",
-    capacity: 120,
+    capacity: 140,
     occupied: 95,
-    amenities: ["Wi-Fi", "Mess", "Security", "Laundry"],
-    floors: { ground: 20, first: 30, second: 10 },
+    amenities: ["Wi-Fi", "Mess", "Security", "Laundry", "Gym", "Sick Room", "Common Room", "Playing Area", "Reading Room"],
+    floors: { ground: 40, first: 50, second: 50 },
   },
   {
     name: "Ismat Girls Hostel",
     type: "Girls",
-    capacity: 100,
-    occupied: 78,
+    capacity: 16,
+    occupied: 12,
     amenities: ["Wi-Fi", "Mess", "Security", "Common Room"],
-    floors: { ground: 15, first: 25, second: 12 },
+    floors: { first: 8, second: 8 },
+    isDormitory: true,
   },
   {
     name: "Quratulain Girls Hostel",
     type: "Girls",
-    capacity: 150,
-    occupied: 130,
-    amenities: ["Wi-Fi", "Mess", "Security", "Library"],
-    floors: { ground: 30, first: 40, second: 10 },
+    capacity: 130,
+    occupied: 100,
+    amenities: ["Wi-Fi", "Mess", "Security", "Laundry", "Gym", "Sick Room", "Common Room", "Playing Area", "Reading Room"],
+    floors: { ground: 40, first: 45, second: 45 },
   },
 ];
 
@@ -93,7 +94,7 @@ const HostelsPage = () => (
                     <div key={floor} className="text-center p-2 rounded-lg bg-secondary">
                       <Layers className="w-4 h-4 mx-auto text-primary mb-1" />
                       <div className="text-xs text-muted-foreground capitalize">{floor} Floor</div>
-                      <div className="text-sm font-semibold text-card-foreground">{count} rooms</div>
+                      <div className="text-sm font-semibold text-card-foreground">{count} {h.isDormitory ? "dormitory" : "rooms"}</div>
                     </div>
                   ))}
                 </div>
