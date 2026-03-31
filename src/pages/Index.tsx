@@ -64,8 +64,8 @@ const Index = () => {
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/20 backdrop-blur-sm text-primary-foreground text-sm font-medium mb-6 border border-primary-foreground/30">
               MANUU University
             </span>
-            <h1 className="font-display text-5xl md:text-7xl font-bold text-primary-foreground leading-tight mb-6">
-              Hostel<span className="text-gold">Ease</span>
+            <h1 className="font-display text-4xl md:text-6xl font-bold text-primary-foreground leading-tight mb-6">
+              MANUU <span className="text-gold">Automated Hostel Allocation System</span>
             </h1>
             <p className="text-xl text-primary-foreground/90 mb-8 font-light leading-relaxed">
               Automated Hostel Allocation System — making hostel allotment smooth, transparent, and student-friendly.
