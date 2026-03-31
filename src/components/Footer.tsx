@@ -7,7 +7,7 @@ const Footer = () => (
         <div>
           <div className="flex items-center gap-2 mb-3">
             <Building2 className="w-5 h-5" />
-            <span className="font-display text-lg font-bold">HostelEase</span>
+            <span className="font-display text-lg font-bold">MANUU Automated Hostel Allocation System</span>
           </div>
           <p className="text-sm opacity-80">
             Automated Hostel Allocation System for MANUU University. Making hostel allotment transparent, efficient, and student-friendly.

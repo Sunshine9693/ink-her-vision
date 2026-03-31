@@ -22,8 +22,8 @@ const Navbar = () => {
           <div className="w-9 h-9 rounded-lg gradient-hero flex items-center justify-center">
             <Building2 className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-bold text-foreground">
-            Hostel<span className="text-gradient">Ease</span>
+          <span className="font-display text-sm font-bold text-foreground leading-tight">
+            MANUU <span className="text-gradient">AUTOMATED HOSTEL ALLOCATION SYSTEM</span>
           </span>
         </Link>
 

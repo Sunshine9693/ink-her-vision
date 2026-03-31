@@ -87,13 +87,13 @@ const HostelsPage = () => (
                   </div>
                 </div>
 
-                {/* Room types */}
+                {/* Floors */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
-                  {Object.entries(h.rooms).map(([type, count]) => (
-                    <div key={type} className="text-center p-2 rounded-lg bg-secondary">
-                      <Bed className="w-4 h-4 mx-auto text-primary mb-1" />
-                      <div className="text-xs text-muted-foreground capitalize">{type}</div>
-                      <div className="text-sm font-semibold text-card-foreground">{count}</div>
+                  {Object.entries(h.floors).map(([floor, count]) => (
+                    <div key={floor} className="text-center p-2 rounded-lg bg-secondary">
+                      <Layers className="w-4 h-4 mx-auto text-primary mb-1" />
+                      <div className="text-xs text-muted-foreground capitalize">{floor} Floor</div>
+                      <div className="text-sm font-semibold text-card-foreground">{count} rooms</div>
                     </div>
                   ))}
                 </div>

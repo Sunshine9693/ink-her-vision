@@ -32,7 +32,7 @@ const features = [
 const stats = [
   { value: "500+", label: "Rooms Available" },
   { value: "2000+", label: "Students Served" },
-  { value: "6", label: "Hostels" },
+  { value: "3", label: "Hostels" },
   { value: "99%", label: "Satisfaction Rate" },
 ];
 
