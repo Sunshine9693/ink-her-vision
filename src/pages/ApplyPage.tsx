@@ -20,6 +20,7 @@ const ApplyPage = () => {
     hostelPreference: "",
     roomType: "",
     address: "",
+    distance: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
