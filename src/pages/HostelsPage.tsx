@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Building2, Users, Bed, Wifi, ShieldCheck, Utensils } from "lucide-react";
+import { Building2, Users, Layers, Wifi, ShieldCheck, Utensils } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
