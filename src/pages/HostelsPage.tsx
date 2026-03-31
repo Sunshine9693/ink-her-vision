@@ -1,40 +1,32 @@
 import { motion } from "framer-motion";
-import { Building2, Users, Bed, Wifi, ShieldCheck, Utensils } from "lucide-react";
+import { Building2, Users, Layers, Wifi, ShieldCheck, Utensils } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const hostels = [
   {
-    name: "Hostel A",
+    name: "Gulzar Girls Hostel",
     type: "Girls",
     capacity: 120,
     occupied: 95,
     amenities: ["Wi-Fi", "Mess", "Security", "Laundry"],
-    rooms: { single: 20, double: 30, triple: 10 },
+    floors: { ground: 20, first: 30, second: 10 },
   },
   {
-    name: "Hostel B",
+    name: "Ismat Girls Hostel",
     type: "Girls",
     capacity: 100,
     occupied: 78,
     amenities: ["Wi-Fi", "Mess", "Security", "Common Room"],
-    rooms: { single: 15, double: 25, triple: 12 },
+    floors: { ground: 15, first: 25, second: 12 },
   },
   {
-    name: "Hostel C",
-    type: "Boys",
+    name: "Quratulain Girls Hostel",
+    type: "Girls",
     capacity: 150,
     occupied: 130,
-    amenities: ["Wi-Fi", "Mess", "Security", "Gym"],
-    rooms: { single: 30, double: 40, triple: 10 },
-  },
-  {
-    name: "Hostel D",
-    type: "Boys",
-    capacity: 130,
-    occupied: 110,
     amenities: ["Wi-Fi", "Mess", "Security", "Library"],
-    rooms: { single: 25, double: 35, triple: 8 },
+    floors: { ground: 30, first: 40, second: 10 },
   },
 ];
 
@@ -95,13 +87,13 @@ const HostelsPage = () => (
                   </div>
                 </div>
 
-                {/* Room types */}
+                {/* Floors */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
-                  {Object.entries(h.rooms).map(([type, count]) => (
-                    <div key={type} className="text-center p-2 rounded-lg bg-secondary">
-                      <Bed className="w-4 h-4 mx-auto text-primary mb-1" />
-                      <div className="text-xs text-muted-foreground capitalize">{type}</div>
-                      <div className="text-sm font-semibold text-card-foreground">{count}</div>
+                  {Object.entries(h.floors).map(([floor, count]) => (
+                    <div key={floor} className="text-center p-2 rounded-lg bg-secondary">
+                      <Layers className="w-4 h-4 mx-auto text-primary mb-1" />
+                      <div className="text-xs text-muted-foreground capitalize">{floor} Floor</div>
+                      <div className="text-sm font-semibold text-card-foreground">{count} rooms</div>
                     </div>
                   ))}
                 </div>

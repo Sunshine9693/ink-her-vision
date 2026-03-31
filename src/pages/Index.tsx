@@ -32,7 +32,7 @@ const features = [
 const stats = [
   { value: "500+", label: "Rooms Available" },
   { value: "2000+", label: "Students Served" },
-  { value: "6", label: "Hostels" },
+  { value: "3", label: "Hostels" },
   { value: "99%", label: "Satisfaction Rate" },
 ];
 
@@ -64,8 +64,8 @@ const Index = () => {
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/20 backdrop-blur-sm text-primary-foreground text-sm font-medium mb-6 border border-primary-foreground/30">
               MANUU University
             </span>
-            <h1 className="font-display text-5xl md:text-7xl font-bold text-primary-foreground leading-tight mb-6">
-              Hostel<span className="text-gold">Ease</span>
+            <h1 className="font-display text-4xl md:text-6xl font-bold text-primary-foreground leading-tight mb-6">
+              MANUU <span className="text-gold">Automated Hostel Allocation System</span>
             </h1>
             <p className="text-xl text-primary-foreground/90 mb-8 font-light leading-relaxed">
               Automated Hostel Allocation System — making hostel allotment smooth, transparent, and student-friendly.
@@ -115,7 +115,7 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="font-display text-4xl font-bold text-foreground mb-4">
-              Why <span className="text-gradient">HostelEase</span>?
+              Why <span className="text-gradient">MANUU AHAS</span>?
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               A modern solution to replace manual hostel allotment with digital efficiency
@@ -150,7 +150,7 @@ const Index = () => {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
               <h2 className="font-display text-4xl font-bold text-foreground mb-6">About the Project</h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                The <strong className="text-foreground">Hostel Ease</strong> system is developed as part of the B.Tech program at
+                The <strong className="text-foreground">MANUU Automated Hostel Allocation System</strong> is developed as part of the B.Tech program at
                 Maulana Azad National Urdu University, Hyderabad. It automates the hostel allocation process, ensuring
                 transparency, accuracy, and efficiency in managing student accommodations.
               </p>
