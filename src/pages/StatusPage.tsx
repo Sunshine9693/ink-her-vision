@@ -105,7 +105,7 @@ const StatusPage = () => {
             )}
 
             <div className="mt-8 p-4 rounded-xl bg-secondary text-sm text-muted-foreground">
-              <strong className="text-secondary-foreground">Demo enrollments:</strong> 23BTCS012HY (Approved), 23BTCS047HY (Pending), 24BLCS002HY (Rejected)
+              <strong className="text-secondary-foreground">Demo enrollments:</strong> A230012 (Approved), A230047 (Pending), A230132 (Rejected)
             </div>
           </motion.div>
         </div>

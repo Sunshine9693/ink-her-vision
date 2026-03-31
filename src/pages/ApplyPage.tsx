@@ -28,7 +28,7 @@ const ApplyPage = () => {
     toast.success("Application submitted successfully! Check your status using your enrollment number.");
     setFormData({
       fullName: "", enrollmentNo: "", email: "", phone: "",
-      department: "", year: "", hostelPreference: "", roomType: "", address: "",
+      department: "", year: "", hostelPreference: "", roomType: "", address: "", distance: "",
     });
   };
 
