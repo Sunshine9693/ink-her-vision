@@ -1,4 +1,4 @@
-import { useState } from "react";
+Remove-Item .\src\pages\ApplyPage_new.tsximport { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,16 +19,84 @@ const ApplyPage = () => {
     phone: "",
     department: "",
     year: "",
+    caste: "",
     hostelPreference: "",
     floorPreference: "",
     address: "",
     distance: "",
+    casteCertificate: null as File | null,
+    ticket: null as File | null,
+    class10Marksheet: null as File | null,
+    class12Marksheet: null as File | null,
+    aadharCardUser: null as File | null,
+    aadharCardParent: null as File | null,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Validate caste-related fields
+      if (formData.caste === "obc") {
+        if (!formData.casteCertificate || !formData.ticket || !formData.class10Marksheet || 
+            !formData.class12Marksheet || !formData.aadharCardUser || !formData.aadharCardParent) {
+          toast.error("All documents are required for OBC category");
+          setLoading(false);
+          return;
+        }
+      } else if (formData.caste === "general") {
+        if (!formData.class10Marksheet || !formData.class12Marksheet || 
+            !formData.aadharCardUser || !formData.aadharCardParent) {
+          toast.error("All documents are required for General category");
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Upload files to Supabase storage
+      let fileUrls: any = {};
+      if (formData.caste === "obc") {
+        const files = {
+          casteCertificate: formData.casteCertificate,
+          ticket: formData.ticket,
+          class10Marksheet: formData.class10Marksheet,
+          class12Marksheet: formData.class12Marksheet,
+          aadharCardUser: formData.aadharCardUser,
+          aadharCardParent: formData.aadharCardParent,
+        };
+
+        for (const [key, file] of Object.entries(files)) {
+          if (file) {
+            const fileName = `${formData.enrollmentNo.toUpperCase()}_${key}_${Date.now()}`;
+            const { data, error: uploadError } = await supabase.storage
+              .from("hostel_documents")
+              .upload(fileName, file);
+
+            if (uploadError) throw new Error(`Failed to upload ${key}: ${uploadError.message}`);
+            fileUrls[key] = data.path;
+          }
+        }
+      } else if (formData.caste === "general") {
+        const files = {
+          class10Marksheet: formData.class10Marksheet,
+          class12Marksheet: formData.class12Marksheet,
+          aadharCardUser: formData.aadharCardUser,
+          aadharCardParent: formData.aadharCardParent,
+        };
+
+        for (const [key, file] of Object.entries(files)) {
+          if (file) {
+            const fileName = `${formData.enrollmentNo.toUpperCase()}_${key}_${Date.now()}`;
+            const { data, error: uploadError } = await supabase.storage
+              .from("hostel_documents")
+              .upload(fileName, file);
+
+            if (uploadError) throw new Error(`Failed to upload ${key}: ${uploadError.message}`);
+            fileUrls[key] = data.path;
+          }
+        }
+      }
+
       const { error } = await supabase.from("hostel_applications").insert({
         full_name: formData.fullName,
         enrollment_no: formData.enrollmentNo.toUpperCase(),
@@ -36,16 +104,25 @@ const ApplyPage = () => {
         phone: formData.phone,
         department: formData.department,
         year: formData.year,
+        caste: formData.caste,
         hostel_preference: formData.hostelPreference,
         floor_preference: formData.floorPreference,
         address: formData.address,
         distance: formData.distance,
+        ...(fileUrls && Object.keys(fileUrls).length > 0 && { documents: fileUrls }),
       } as any);
       if (error) throw error;
       toast.success("Application submitted successfully! Check your status using your enrollment number.");
       setFormData({
         fullName: "", enrollmentNo: "", email: "", phone: "",
-        department: "", year: "", hostelPreference: "", floorPreference: "", address: "", distance: "",
+        department: "", year: "", caste: "", hostelPreference: "", floorPreference: "", 
+        address: "", distance: "",
+        casteCertificate: null,
+        ticket: null,
+        class10Marksheet: null,
+        class12Marksheet: null,
+        aadharCardUser: null,
+        aadharCardParent: null,
       });
     } catch (err: any) {
       toast.error(err.message || "Failed to submit application");
@@ -54,8 +131,12 @@ const ApplyPage = () => {
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | File | null) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileChange = (field: string, file: File | null) => {
+    setFormData((prev) => ({ ...prev, [field]: file }));
   };
 
   return (
@@ -121,6 +202,175 @@ const ApplyPage = () => {
                   </Select>
                 </div>
               </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Caste Category</Label>
+                  <Select value={formData.caste} onValueChange={(v) => handleChange("caste", v)}>
+                    <SelectTrigger><SelectValue placeholder="Select caste category" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="general">General</SelectItem>
+                      <SelectItem value="obc">OBC (Other Backward Classes)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {formData.caste === "obc" && (
+                <div className="space-y-6 p-6 rounded-lg border border-amber-200 bg-amber-50">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-sm text-amber-800 font-semibold">OBC Category - Documents Required</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="casteCertificate">Caste Certificate (PDF)</Label>
+                      <p className="text-xs text-gray-600">Valid OBC certificate issued by competent authority</p>
+                      <Input 
+                        id="casteCertificate" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("casteCertificate", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.casteCertificate && <p className="text-sm text-green-600">✓ {formData.casteCertificate.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="ticket">Ticket/Challan (PDF)</Label>
+                      <p className="text-xs text-gray-600">Caste certificate fee payment challan/ticket</p>
+                      <Input 
+                        id="ticket" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("ticket", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.ticket && <p className="text-sm text-green-600">✓ {formData.ticket.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="class10Marksheet">10th Grade Marksheet (PDF)</Label>
+                      <p className="text-xs text-gray-600">Board examination marksheet/certificate</p>
+                      <Input 
+                        id="class10Marksheet" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("class10Marksheet", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.class10Marksheet && <p className="text-sm text-green-600">✓ {formData.class10Marksheet.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="class12Marksheet">12th Grade Marksheet (PDF)</Label>
+                      <p className="text-xs text-gray-600">Board examination marksheet/certificate</p>
+                      <Input 
+                        id="class12Marksheet" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("class12Marksheet", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.class12Marksheet && <p className="text-sm text-green-600">✓ {formData.class12Marksheet.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="aadharCardUser">Aadhar Card - Student (PDF)</Label>
+                      <p className="text-xs text-gray-600">Your Aadhar card copy</p>
+                      <Input 
+                        id="aadharCardUser" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("aadharCardUser", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.aadharCardUser && <p className="text-sm text-green-600">✓ {formData.aadharCardUser.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="aadharCardParent">Aadhar Card - Parent/Guardian (PDF)</Label>
+                      <p className="text-xs text-gray-600">Parent or guardian's Aadhar card copy</p>
+                      <Input 
+                        id="aadharCardParent" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("aadharCardParent", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.aadharCardParent && <p className="text-sm text-green-600">✓ {formData.aadharCardParent.name}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {formData.caste === "general" && (
+                <div className="space-y-6 p-6 rounded-lg border border-blue-200 bg-blue-50">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-sm text-blue-800 font-semibold">General Category - Documents Required</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="class10Marksheet">10th Grade Marksheet (PDF)</Label>
+                      <p className="text-xs text-gray-600">Board examination marksheet/certificate</p>
+                      <Input 
+                        id="class10Marksheet" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("class10Marksheet", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.class10Marksheet && <p className="text-sm text-green-600">✓ {formData.class10Marksheet.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="class12Marksheet">12th Grade Marksheet (PDF)</Label>
+                      <p className="text-xs text-gray-600">Board examination marksheet/certificate</p>
+                      <Input 
+                        id="class12Marksheet" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("class12Marksheet", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.class12Marksheet && <p className="text-sm text-green-600">✓ {formData.class12Marksheet.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="aadharCardUser">Aadhar Card - Student (PDF)</Label>
+                      <p className="text-xs text-gray-600">Your Aadhar card copy</p>
+                      <Input 
+                        id="aadharCardUser" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("aadharCardUser", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.aadharCardUser && <p className="text-sm text-green-600">✓ {formData.aadharCardUser.name}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="aadharCardParent">Aadhar Card - Parent/Guardian (PDF)</Label>
+                      <p className="text-xs text-gray-600">Parent or guardian's Aadhar card copy</p>
+                      <Input 
+                        id="aadharCardParent" 
+                        type="file" 
+                        accept=".pdf" 
+                        onChange={(e) => handleFileChange("aadharCardParent", e.target.files?.[0] || null)}
+                        required 
+                      />
+                      {formData.aadharCardParent && <p className="text-sm text-green-600">✓ {formData.aadharCardParent.name}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
